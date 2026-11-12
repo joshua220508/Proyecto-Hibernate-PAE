@@ -3,26 +3,48 @@ package com.appregistros.proyectohibernate.database;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class JPAUtil {
-
     private static EntityManagerFactory entityManagerFactory;
+
+    private static String getEnvOrDefault(String key, String defaultValue) {
+        String value = System.getenv(key);
+        return (value == null || value.isEmpty()) ? defaultValue : value;
+    }
+
+    public static String getJdbcUrl() {
+        return getEnvOrDefault("DB_URL", "jdbc:postgresql://localhost:5432/bdbiblioteca");
+    }
+
+    public static String getJdbcUser() {
+        return getEnvOrDefault("DB_USER", "postgres");
+    }
+
+    public static String getJdbcPassword() {
+        return getEnvOrDefault("DB_PASSWORD", "123");
+    }
+
+    public static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(getJdbcUrl(), getJdbcUser(), getJdbcPassword());
+    }
 
     public static synchronized void iniciar() {
         if (entityManagerFactory == null) {
-            String password = System.getenv("DB_PASSWORD");
+            Map<String, Object> properties = new HashMap<>();
+            properties.put("jakarta.persistence.jdbc.driver", "org.postgresql.Driver");
+            properties.put("jakarta.persistence.jdbc.url", getJdbcUrl());
+            properties.put("jakarta.persistence.jdbc.user", getJdbcUser());
+            properties.put("jakarta.persistence.jdbc.password", getJdbcPassword());
+            properties.put("hibernate.hbm2ddl.auto", "update");
+            properties.put("hibernate.show_sql", "false");
 
-            if (password == null || password.isEmpty()) {
-                throw new RuntimeException("DB_PASSWORD inválido");
-            }
-
-            Map<String, Object> propiedades = new HashMap<String, Object>();
-            propiedades.put("jakarta.persistence.jdbc.password", password);
-
-            entityManagerFactory = Persistence
-                    .createEntityManagerFactory("bibliotecaPU", propiedades);
+            entityManagerFactory = Persistence.createEntityManagerFactory("bibliotecaPU", properties);
         }
     }
 

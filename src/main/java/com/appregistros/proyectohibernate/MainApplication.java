@@ -8,23 +8,27 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class HelloApplication extends Application {
+public class MainApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
 
         FXMLLoader fxmlLoader = new FXMLLoader(
-                HelloApplication.class.getResource("libro-view.fxml")
+                MainApplication.class.getResource(
+                        "/com/appregistros/proyectohibernate/libro-view.fxml"
+                )
         );
 
         Scene scene = new Scene(fxmlLoader.load());
 
-        stage.setTitle("Registro de libros - Hibernate");
+        stage.setTitle("Sistema de gestión de biblioteca");
         stage.setScene(scene);
+        stage.setMinWidth(750);
+        stage.setMinHeight(550);
         stage.show();
     }
 
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
 }
