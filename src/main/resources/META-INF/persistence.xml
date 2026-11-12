@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
-             version="2.1">
-    <persistence-unit name="bibliotecaPU"  transaction-type="RESOURCE_LOCAL">
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             version="3.0">
+
+    <persistence-unit name="bibliotecaPU" transaction-type="RESOURCE_LOCAL">
+
         <provider>
             org.hibernate.jpa.HibernatePersistenceProvider
         </provider>
-        <class>
-            com.appregistros.proyectohibernate.model.Libro
-        </class>
+
+        <!-- Clases de las entidades -->
+        <class>com.appregistros.proyectohibernate.model.Libro</class>
+        <class>com.appregistros.proyectohibernate.model.Categoria</class>
+
         <properties>
-            <!-- Propiedades de Postgresql -->
-            <property name="jakarta.persistence.jdbc.driver" value = "org.postgresql.Driver"/>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432"/>
+            <!-- Propiedades de PostgreSQL -->
+            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/bdbiblioteca"/>
             <property name="jakarta.persistence.jdbc.user" value="postgres"/>
             <property name="jakarta.persistence.jdbc.password" value="123"/>
 
-            <!-- Propiedades de Postgresql -->
+            <!-- Propiedades de Hibernate -->
             <property name="hibernate.hbm2ddl.auto" value="validate"/>
             <property name="hibernate.format_sql" value="true"/>
         </properties>

@@ -1,6 +1,7 @@
 package com.appregistros.proyectohibernate.dao;
 
 import com.appregistros.proyectohibernate.database.JPAUtil;
+import com.appregistros.proyectohibernate.model.Categoria;
 import com.appregistros.proyectohibernate.model.Libro;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -8,6 +9,13 @@ import jakarta.persistence.EntityTransaction;
 import java.util.List;
 
 public class LibroDAO{
+
+    private Categoria obtenerCategoria(EntityManager em, Libro libro) {
+
+        Long categoriaId = libro.getCategoria().getId();
+
+        return em.find(Categoria.class, categoriaId);
+    }
 
     public void guardar(Libro libro) {
         EntityManager em = JPAUtil.getEntityManager();
